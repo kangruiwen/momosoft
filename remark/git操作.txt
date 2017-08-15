@@ -1,0 +1,12 @@
+1. 创建版本库
+	git init 使用这个命令可以把当前目录变成git可以管理的仓库
+2.查看状态
+	git status
+3.添加到暂存区
+	git add filename
+4.把文件提交到仓库
+	git commit -m 'remark'
+5.如何添加远程仓库
+	5.1 在github上创建一个仓库，例如仓库名为momo
+	5.2 在本地git仓库下运行 git remote add origin https://github.com/kangruiwen/momo
+	
