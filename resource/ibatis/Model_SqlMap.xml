@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="MessageModel">
+	<typeAlias type="com.hcss.message.model.MessageModel" alias="MessageModel"/>
+	<typeAlias type="com.hcss.message.model.MailModel" alias="MailModel"/>
+	<typeAlias type="com.hcss.message.model.SendedRecordsModel" alias="SendedRecordsModel"/>
+	
+	    <select id="getImmediatelyMessageList" resultClass="MessageModel" parameterClass="MessageModel" remapResults="true">
+	 select msg.id,msg.mobile,msg.text,mng.isuse,mng.id ruleId
+	 		from hcss_message msg, hcss_msgmanage mng
+		 where msg.rule_id = mng.id
+	 		 and mng.type = '1'
+	 		 and msg.send_flag = 'N'
+	 		 and mng.isuse = '0'
+	    </select>
+	    <select id="getInRuleMessageList" resultClass="MessageModel" parameterClass="java.lang.String" remapResults="true">
+	    select msg.id, msg.mobile, msg.text,mng.isuse,mng.id ruleId
+	  from hcss_message msg, hcss_msgmanage mng
+	 where msg.rule_id = mng.id
+	   and mng.type = '0'
+	   and msg.send_flag = 'N'
+	   and mng.isuse = '0'
+	   and to_char(mng.begin_time, 'hh24:mi:ss') =
+	       to_char(trunc(to_date(#date#,'yyyy-mm-dd hh24:mi:ss'),'mi'), 'hh24:mi:ss') 
+	    </select>
+	    <update id="closeRuleStatus" parameterClass="java.lang.String">
+	   	 update hcss_msgmanage m set m.isuse = '1' where m.id = #ruleId#
+	    </update>
+	    <update id="openRuleStatus" parameterClass="java.lang.String">
+	    	 update hcss_msgmanage m set m.isuse = '0' where m.id = #ruleId#
+	    </update>
+	    <update id="updateMessageSendFlag" parameterClass="MessageModel">
+	    	update hcss_message t
+		   set t.send_flag = #send_flag# , 
+		   t.send_date = sysdate()
+		 where t.id = #id#
+	    </update>
+	    <select id="getUnSendMessageList" parameterClass="MessageModel" resultClass="MessageModel" remapResults="true">
+	    select 
+		t.id as id,
+		t.text as text,
+		t.mobile as mobile,
+		t.node_id,
+		t.res_id,
+		t.parameter,
+		t.send_flag,
+		DATE_FORMAT(t.CREATE_DATE,'%Y-%m-%d %H:%i:%S')   CREATE_DATE,
+		DATE_FORMAT(t.SEND_DATE,'%Y-%m-%d %H:%i:%S')   SEND_DATE,
+		DATE_FORMAT(t.TARGET_DATE,'%Y-%m-%d %H:%i:%S')   TARGET_DATE
+	 from hcss_message t	
+	 where t.send_flag='N'
+	 order by CREATE_DATE  desc limit #datanum#
+	    </select>
+	    <select id="getUnSendMailList" parameterClass="MailModel" resultClass="MailModel" remapResults="true">
+	    	select 
+			t.ID,
+			t.TEXT,
+			t.email,
+			t.title,
+			t.SEND_FLAG,
+			t.node_id,
+			t.res_id,
+			t.parameter,
+			DATE_FORMAT(t.CREATE_DATE,'%Y-%m-%d %H:%i:%S') CREATE_DATE,
+			DATE_FORMAT(t.SEND_DATE,'%Y-%m-%d %H:%i:%S') SEND_DATE,
+			DATE_FORMAT(t.TARGET_DATE,'%Y-%m-%d %H:%i:%S')TARGET_DATE
+			from hcss_mail t
+			where t.SEND_FLAG='N'
+			order by CREATE_DATE desc limit #datanum#
+	    </select>
+	    <update id="updateMailSendFlag" parameterClass="MailModel">
+	    update hcss_mail t
+		   set t.send_flag = #send_flag# , 
+		   t.send_date = sysdate()
+		 where t.id = #id#
+	    </update>
+	    
+	    <select id="getCompressGrade" resultClass="java.lang.Integer">
+	    	select alarm_compress_grade from alarm_compress_config
+	    </select>
+	    <insert id="insertSendedRecord" parameterClass="SendedRecordsModel">
+	    	insert into sended_records(config_MD5,send_type,record_date) values(#config_MD5#,#send_type#,now())
+	    </insert>
+	    <select id="getByMd5" parameterClass="SendedRecordsModel" resultClass="SendedRecordsModel">
+	    	select id,config_MD5,send_type,record_date 
+	    	from sended_records 
+	    	where config_MD5 = #config_MD5# 
+	    	and send_type = #send_type#
+	    	and record_date = DATE(NOW())
+	    </select>
+	    
+	    <select id="getNoSendMailList" resultClass="MailModel">
+	    	<![CDATA[
+	     	select 
+				t.ID,
+				t.TEXT,
+				t.res_id,
+				t.node_id,
+				t.parameter,
+				t.email,
+				t.title,
+				t.SEND_FLAG,
+				DATE_FORMAT(t.CREATE_DATE,'%Y-%m-%d %H:%i:%S') CREATE_DATE,
+				DATE_FORMAT(t.SEND_DATE,'%Y-%m-%d %H:%i:%S') SEND_DATE,
+				DATE_FORMAT(t.TARGET_DATE,'%Y-%m-%d %H:%i:%S') TARGET_DATE				
+			from hcss_mail t
+			where t.SEND_FLAG='D' 
+			and t.CREATE_DATE < DATE_FORMAT(DATE_ADD(NOW(), INTERVAL - 2 DAY),'%Y-%m-%d 00:00:00')
+	    	]]>
+	    </select>
+	    
+	    <insert id="insertMailBak" parameterClass="MailModel">
+	    	insert into hcss_mail_bak(id,text,res_id,node_id,parameter,email,title,send_flag,create_date,send_date,target_date) 
+	    	values(#id#,#text#,#res_id#,#node_id#,#parameter#,#email#,#title#,#send_flag#,#create_date#,#send_date#,#target_date#)
+	    </insert>
+	    
+	    <delete id="deleteMail" parameterClass="MailModel">
+	    	delete from hcss_mail where id = #id#
+	    </delete>
+	    
+	    <select id="getNoSendMessageList" resultClass="MessageModel">
+	    	<![CDATA[
+	    		select 
+				t.id,
+				t.text,
+				t.res_id,
+				t.node_id,
+				t.parameter,
+				t.mobile,
+				t.send_flag,
+				DATE_FORMAT(t.CREATE_DATE,'%Y-%m-%d %H:%i:%S') CREATE_DATE,
+				DATE_FORMAT(t.SEND_DATE,'%Y-%m-%d %H:%i:%S') SEND_DATE,
+				DATE_FORMAT(t.TARGET_DATE,'%Y-%m-%d %H:%i:%S') TARGET_DATE
+			 from hcss_message t	
+			 where t.send_flag='D'
+			 and t.CREATE_DATE < DATE_FORMAT(DATE_ADD(NOW(), INTERVAL - 2 DAY),'%Y-%m-%d 00:00:00')
+	    	]]>
+	    </select>
+	    
+	    <insert id="insertMsgBak" parameterClass="MessageModel">
+	    	insert into hcss_message_bak(id,text,res_id,node_id,parameter,mobile,send_flag,create_date,send_date,target_date)  
+	    	values(#id#,#text#,#res_id#,#node_id#,#parameter#,#mobile#,#send_flag#,#create_date#,#send_date#,#target_date#)
+	    </insert>
+	    
+	    <delete id="deleteMsg" parameterClass="MessageModel">
+	    	delete from hcss_message where id = #id#
+	    </delete>
+</sqlMap>
