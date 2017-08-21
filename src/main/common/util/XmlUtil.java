@@ -18,7 +18,6 @@ import org.dom4j.io.XMLWriter;
  */
 public class XmlUtil {
 	
-	
 	/**
      * 使用Dom4j 写入 XML  
 	 * @param obj java对象
@@ -57,7 +56,6 @@ public class XmlUtil {
                     	valStr = val.toString();
                     	itemEle.addElement(properties[i].getName()).setText(valStr);   
                     }
-                   
                 }   
             }   
             //生成XML文件
