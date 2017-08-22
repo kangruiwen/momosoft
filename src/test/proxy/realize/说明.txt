@@ -1,0 +1,21 @@
+这个包里边是JDK动态代理的实现
+
+问题：
+1.classLoader在加载字节码文件的时候，只能加载classPath下的字节码文件，并不能使用绝对路径进行加载，并且现在自己实现的这个有问题，
+      在第一次加载的时候仍会报错
+      
+动态加载的过程：
+	1.被代理类需要实现一个接口
+		interface Subject;
+	2.声明初始化一个被代理类，既真实类 
+		Subject subject = new TrueSubject();
+	3.声明初始化代理类，代理类需要继承InvocationHandler接口，这个接口也叫事物处理器
+		传入需要代理的真是对象 subject
+		InvocationHandler hand = new ProxySubject(subject);
+	4.使用Proxy构造代理对象
+		Subject ss =  Proxy.newProxyInstance(Class<?>[] interfaces,InvocationHandler h)
+		第一个参数是被代理类的接口数组
+		第二个参数是代理类对象
+
+说明：
+	这个新生成的ss并不是原有系统中存在的，而是在第四步中由Proxy动态创建的。

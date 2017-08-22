@@ -91,6 +91,22 @@
 		<version>5.1.37</version>
 	</dependency>
 	
+	<!-- io三方包 -->
+	<dependency>
+	    <groupId>commons-io</groupId>
+	    <artifactId>commons-io</artifactId>
+	    <version>2.4</version>
+	</dependency>
+	
+	<!-- junit 配置包 -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.3</version>
+		<scope>test</scope>
+	</dependency>
+	
+	
   </dependencies>
   
 </project>

@@ -19,6 +19,7 @@ import javax.sql.DataSource;
  * @author momo
  * @time 2017年8月17日上午8:53:54 连接池实现
  *       方法转自:http://www.cnblogs.com/xdp-gacl/p/4002804.html
+ * 这部分的难点在于，如何在使用完毕连接之后，将连接返回到连接池，这里的解决方案是使用动态代理，对connection的close方法进行的代理
  */
 public class DataSourceUtil implements DataSource{
 	
@@ -47,7 +48,6 @@ public class DataSourceUtil implements DataSource{
 			throw new ExceptionInInitializerError(e);
 		}
 	}
-	
 	
 	public Connection getConnection() throws SQLException {
 		// 如果数据库连接池中的连接对象的个数大于0
@@ -108,6 +108,4 @@ public class DataSourceUtil implements DataSource{
 		return null;
 	}
 	
-	
-
 }

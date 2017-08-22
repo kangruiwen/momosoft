@@ -103,4 +103,8 @@ public class ExcelTempletServiceImpl implements ExcelTempletService{
 		excelTempletDao.executeSql(sql.toString());
 	}
 
+	public List<ExcelColumn> selectExcelColumnList(String id) {
+		return null;
+	}
+
 }

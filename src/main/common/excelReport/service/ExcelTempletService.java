@@ -12,4 +12,6 @@ import main.common.excelReport.model.ExcelHead;
 public interface ExcelTempletService {
 	
 	void insertExcelExample(ExcelHead excelHead, List<ExcelColumn> listCol);
+	
+	List<ExcelColumn> selectExcelColumnList(String id);
 }
