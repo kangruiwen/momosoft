@@ -13,8 +13,8 @@ import main.common.excelReport.model.ExcelColumn;
 import main.common.excelReport.model.ExcelHead;
 import main.common.excelReport.model.ExcelModel;
 import main.common.excelReport.service.ExcelTempletService;
-import main.common.springmvc.model.AjaxResult;
 import main.common.util.ExcelUtil;
+import main.system.springmvc.model.AjaxResult;
 
 /**
  * @author momo

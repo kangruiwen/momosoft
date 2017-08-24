@@ -29,6 +29,7 @@ public class IbatisSatrt {
 		
 		//2. 获取数据库连接
 		reader = Resources.getResourceAsReader(resource);
+		@SuppressWarnings("unused")
 		SqlMapClient sqlMap =  SqlMapClientBuilder.buildSqlMapClient(reader);
 	}
 	

@@ -1,4 +1,4 @@
-package main.common.springmvc.model;
+package main.system.springmvc.model;
 
 /**
  * @author momo
