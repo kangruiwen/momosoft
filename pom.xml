@@ -126,12 +126,68 @@
 	    <classifier>jdk15</classifier>    
 	</dependency>
 	
+	<!-- httpclient -->
+	<dependency>
+	    <groupId>org.apache.httpcomponents</groupId>
+	    <artifactId>httpclient</artifactId>
+	    <version>4.5.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.httpcomponents</groupId>
+	    <artifactId>httpmime</artifactId>
+	    <version>4.5.2</version>
+	</dependency>
+
+	
+	<!-- json start -->
+	<dependency>    
+	    <groupId>net.sf.json-lib</groupId>    
+	    <artifactId>json-lib</artifactId>    
+	    <version>2.4</version>    
+	    <classifier>jdk15</classifier>    
+	</dependency>
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+		<version>1.2.6</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.json</groupId>
+	    <artifactId>json</artifactId>
+	    <version>20131018</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-annotations</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+	<!-- json end -->
+	
+	
 	<!-- 连接池 -->
 	<dependency>
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>druid</artifactId>
 	    <version>1.0.18</version>
 	</dependency>
+	
+	<!-- 文件类型检查工具 -->
+	<dependency>
+	    <groupId>net.sf.jmimemagic</groupId>
+	    <artifactId>jmimemagic</artifactId>
+	    <version>0.1.4</version>
+	</dependency>
+	
 
 	
   </dependencies>
