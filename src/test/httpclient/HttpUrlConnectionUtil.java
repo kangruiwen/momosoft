@@ -28,7 +28,6 @@ import net.sf.jmimemagic.MagicMatch;
  * HttpURLConnection类的作用是通过HTTP协议向服务器发送请求，并可以获取服务器发回的数据。 
  * 他是jdk中的一个类
  * 
- * 
  * 并且需要注意的是下边有个MagicMatch类，它的作用是获取Content-Type类型，这在我们上传文件的时候非常的重要
  * 
  * 转自：http://blog.csdn.net/wangpeng047/article/details/38303865
@@ -125,8 +124,6 @@ public class HttpUrlConnectionUtil {
 		} 
 	}
 	
-	
-   
 	  /** 
      * 上传图片 
      * @param urlStr 
@@ -228,5 +225,4 @@ public class HttpUrlConnectionUtil {
         }  
         return res;  
     }  
-    
 }

@@ -1,0 +1,42 @@
+用于学习Shiro中的一些记录，好记性不如烂笔头，何况我记性还不好：
+转自：http://www.cnblogs.com/shanheyongmu/p/5736672.html
+
+第一次学习（a）：shiro的身份认证
+
+1. 先说明几个概念：
+
+	1.1  Subject：主体，代表了当前"用户"，这个用户不一定是一个具体的人，与当前应用交互的任何东西都是Subject;
+ 	所有Subject都绑定到SecurityManager，与Subject的所有交互都会委托给SecurityManager;可以把Subject认为是一个门面;SecurityManager才是实际的执行者;
+	1.2  SecurityManager：安全管理器:
+	所有与安全有关的操作都会与SecurityManager交互;且它管理着所有Subject;可以看出它是Shiro的核心,它负责与后边介绍的其他组件进行交互;
+	相当于Spring MVC前段控制器DispatcherServlet。
+
+2. 身份认证的一个流程：
+	2.1   既然提到了认证，那么就拿我们平时登录来讲，我们登录时需要输入username password
+		我们可以根据用户名与密码来定义一个令牌，后期用来验证，令牌是否有效
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+
+	2.2   既然我们使用shiro来对用户进行验证，我们就需要得到一个shiro的管理器
+		// 读取配置文件，初始化SecurityManager工厂
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        // 获取securityManager实例
+        SecurityManager securityManager = factory.getInstance();
+        // 把securityManager实例绑定到SecurityUtils
+        SecurityUtils.setSecurityManager(securityManager);
+        
+	2.3   通过管理器我们可以获得当前的执行的用户
+	 	// 得到当前执行的用户
+        Subject currentUser = SecurityUtils.getSubject();
+        
+	2.4   通过当前用户来对token进行一个验证
+		currentUser.login(token);  
+		在这一步如果认证失败，则会直接报错，我们可以在异常代码中对认证失败的情况，进行处理
+	
+	在身份验证的时候其实是通过传入的token与reaml中的数据进行了一个匹配，如果匹配完成则完成身份认证，如果不匹配则身份认证失败
+	这个reaml其实是一个域，也就是我们写在.ini文件中的东西，当然了，这个realm有很多种，如text realm、jdbc realm、jndi realm等。
+	Shiro从从Realm获取安全数据（如用户、角色、权限），就是说SecurityManager要验证用户身份，那么它需要从Realm获取相应的用户进行比较以确定用户身份是否合法；
+	也需要从Realm得到用户相应的角色/权限进行验证用户是否能进行操作；可以把Realm看成DataSource，即安全数据源。
+	如我们之前的ini配置方式将使用org.apache.shiro.realm.text.IniRealm。
+	当然在后边，这个Realm我们是可以自己定义的
+	
+
