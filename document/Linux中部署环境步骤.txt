@@ -1,0 +1,71 @@
+Linux 环境下Web项目的部署
+
+1.Java环境的部署
+	1.1 下载jdk 
+		可以使用wget等
+	1.2 Jdk的安装
+		1.2.1 由于权限的问题，一般不要在/home下直接安装JDK，可以在/usr下简历java文件夹
+			mkdir /usr/java
+		1.2.2 将jdk安装包移动到/usr/java文件夹下
+			mv jdk.rpm /usr/java
+		1.2.3 切换当前目录到/usr/java目录下给安装文件权限
+			chmod 755 jdk-7u72-linux-x64.rpm
+		1.2.4 安装jdk
+			rpm -ivh jdk-7u72-linux-x64.rpm    (rpm方式)
+			tar tar -zxvf jdk-7u72-linux-x64.tar.gz （tar方式）
+		1.2.5 设置环境变量
+			vi /etc/profile
+			增加以下内容
+			export  JAVA_HOME=/usr/java/jdk1.7.0_72
+			export  CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+			export  PATH=$PATH:$JAVA_HOME/bin
+		1.2.6 重置系统环境变量
+		$ source /etc/profile，使配置环境生效
+	1.3 Jdk的测试
+		java -version 就可以
+
+2.Tomcat的安装
+	2.1 下载Tomcat
+	2.2 安装Tomcat（tar.gz格式）
+		1.2.1 直接解压文件
+			tar -zxv -f apache-tomcat-7.0.68.tar.gz 
+		1.2.2 如有需要的话可以对解压后的文件进行重命名操作，但我感觉没什么用
+			 mv apache-tomcat-7.0.68 tomcat
+	2.3 安装后的测试
+		一般安装成功之后我们可以在Windows机上登录ip地址进行一个测试，看看是否能够登录
+		http://ip:8080
+		查看Tomcat是否成功启动，如果不能显示一般需要在Linux中开放防火墙的8080端口
+		2.3.1 Linux下面的防火墙里面开放8080端口 使用命令如下：
+			2.3.1.1 编辑文件
+				vim /etc/sysconfig/iptables
+			2.3.1.2 打开之后按键盘（i）进入编辑模式，写入开发8080端口，增加下边这一行
+				-A INPUT  -m state --state NEW -m tcp --dport 8080 -j ACCEPT
+			2.3.1.3 重启防火墙
+				service iptables restart 
+				
+3.Web项目的部署
+	从Eclipse中导出war包，通过xftp拉到Linux中的tomcat的webapps根目录下，启动tomcat即可，到此完成
+	
+	
+常用Linux命令
+
+1.vi中保存文件名： w + filename
+2.杀死进程 举例TOMCAT
+	cd /java/tomcat
+　　#执行
+　　bin/startup.sh #启动tomcat
+　　bin/shutdown.sh #停止tomcat
+　　tail -f logs/catalina.out #看tomcat的控制台输出；
+　　#看是否已经有tomcat在运行了
+　　ps -ef |grep tomcat
+　　#如果有，用kill;
+　　kill -9 pid #pid 为相应的进程号
+　　例如 pe -ef |grep tomcat 输出如下
+　　sun 5144 1 0 10:21 pts/1 00:00:06 /java/jdk/bin/java -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.endorsed.dirs=/java/tomcat/common/endorsed -classpath :/java/tomcat/bin/bootstrap.jar:/java/tomcat/bin/commons-logging-api.jar -Dcatalina.base=/java/tomcat -Dcatalina.home=/java/tomcat -Djava.io.tmpdir=/java/tomcat/temp org.apache.catalina.startup.Bootstrap start
+　　则 5144 就为进程号 pid = 5144
+　　kill -9 5144 就可以彻底杀死tomcat
+
+
+
+		
+		
