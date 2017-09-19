@@ -38,7 +38,6 @@ public class AppConsumer {
 		
 		//7.创建一个监听器
 		consumer.setMessageListener(new MessageListener() {
-			@Override
 			public void onMessage(Message message) {
 				TextMessage msg = (TextMessage) message;
 				try {
