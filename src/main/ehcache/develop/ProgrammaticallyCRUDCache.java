@@ -90,6 +90,25 @@ public class ProgrammaticallyCRUDCache {
 		//6. Obtaining Cache Sizes
 		// gets the number of elements currently in the cache.
 		int elementsInMemory = cache.getSize();
+		
+		// 7. The following gets the number of elements currently in the MemoryStore.
+		long elementsInMemory1 = cache.getMemoryStoreSize();
+		// 8. The following gets the number of elements currently in the DiskStore.
+		long elementsInMemory2 = cache.getDiskStoreSize();
+		// but what is the differents of 7 and 8
+		
+	}
+	
+	/**
+	 * You should shut down a CacheManager after use. It does have a shut-down hook, but it
+	 * is a best practice to shut it down in your code
+	 */
+	public void shutDown() {
+		//The following shuts down the singleton CacheManager:
+		CacheManager.getInstance().shutdown();
+		//The following shuts down a CacheManager instance
+		CacheManager manager = CacheManager.newInstance(); 
+		manager.shutdown();
 	}
 	
 	
