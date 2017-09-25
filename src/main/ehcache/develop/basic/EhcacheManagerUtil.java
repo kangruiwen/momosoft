@@ -1,4 +1,4 @@
-package main.ehcache.develop;
+package main.ehcache.develop.basic;
 
 import net.sf.ehcache.CacheManager;
 

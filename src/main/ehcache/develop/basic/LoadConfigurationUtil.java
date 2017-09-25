@@ -1,4 +1,4 @@
-package main.ehcache.develop;
+package main.ehcache.develop.basic;
 
 import java.io.File;
 import java.io.FileInputStream;

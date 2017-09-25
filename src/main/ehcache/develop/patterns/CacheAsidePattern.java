@@ -1,4 +1,4 @@
-package main.ehcache.develop;
+package main.ehcache.develop.patterns;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
