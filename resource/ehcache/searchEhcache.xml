@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="true" monitoring="autodetect"
+         dynamicConfig="true">
+	<!-- 
+		maxBytesLocalHeap:是用来限制缓存所能使用的堆内存的最大字节数的，其单位可以是K、M或G，不区分大小写。默认是0，表示不限制。
+		但是当我们没有指定CacheManager级别的maxBytesLocalHeap时，我们必须在每一个Cache上指定maxBytesLocalHeap或maxEntriesLocalHeap。
+		
+		overflowToOffHeap:
+		
+		maxBytesLocalOffHeap:是用来限制缓存所能使用的非堆内存的最大字节数，其单位也可以是K、M或G。默认是0，表示不限制。
+		但是当我们在CacheManager级别指定了maxBytesLocalOffHeap时就会隐式的使所有Cache级别的overflowToOffHeap为true，
+		在Cache级别使用该属性时只会使当前Cache的overflowToOffHeap为true。如果此时不需要overflowToOffHeap的话，
+		那么我们需要在Cache级别显示的指定overflowToOffHeap为false。只有企业版的Ehcache才能使用非堆内存存储缓存信息。
+		注意只有企业版的Ehcache才能使用，因为官方例子中给的带有这个属性，造成一直cacheManager生成失败。
+		
+		
+		overflowToDisk:true表示当内存缓存的对象数目达到了maxElementsInMemory界限后，会把溢出的对象写到硬盘缓存中。
+		注意：如果缓存的对象要写入到硬盘中的话，则该对象必须实现了Serializable接口才行。 
+		maxEntriesLocalHeap="1000"  : 堆内存中最大缓存对象数,0没有限制(必须设置)
+		maxEntriesLocalDisk= "1000"   : 硬盘最大缓存个数。 
+		
+		3. 下边记录的是缓存失效时间等的配置管理
+			3.1 timeToLiveSeconds : 缓存自创建之时起至失效时的间隔时间单位为秒，默认为0，代表无限长，即缓存永不过期；
+			3.2 timeToIdleSeconds : 缓存创建以后，最后一次访问缓存之时至失效之时的时间间隔，单位为秒，默认为0，永不过期；
+			3.3 eternal : 缓存是否永久有效（true/false）：true表示缓存永久有效，false表示不为永久有效
+			说明：
+			当你配置了eternal属性为true时，如果同时配置timeToLiveSeconds/timeToIdleSeconds不为0，则程序就会报警告；
+			举例说明：timeToLiveSeconds =3600 timeToIdleSeconds =300
+			以上配置代表缓存有效时间为3600秒（自缓存建立起一个小时有效 ），在有效的一个小时内，如果连续五分钟未访问缓存，则缓存失效，特别说明的是，就算缓存访问从未间断，
+			到一个小时后，缓存也会失效
+		
+		4.以下边testCache为例子说明：在堆中的缓存个数最多只有2000个，并且不是永久有效，存活时间是无限制的，但是1小时不操作，缓存会失效。当内存缓存数量达到指定个数后，并不会将溢出的缓存
+		写入磁盘缓存中，这时的默认策略应该是个队，先进先出。最早放入的缓存将会出队。 
+	  -->
+    
+    <defaultCache
+	     maxEntriesLocalHeap="2000"
+	     eternal="false"
+	     timeToIdleSeconds="0"
+	     timeToLiveSeconds="14400"
+	     overflowToDisk="false"
+	     statistics="true">
+    </defaultCache>
+
+    <cache name="testCache"
+	    maxEntriesLocalHeap="2000"
+	    eternal="false"
+	    timeToIdleSeconds="3600"
+	    timeToLiveSeconds="0"
+	    overflowToDisk="false"
+	    statistics="true">
+	    
+	    <searchable/> 
+    </cache>
+</ehcache>
