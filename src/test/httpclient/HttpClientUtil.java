@@ -145,7 +145,7 @@ public class HttpClientUtil {
         CloseableHttpClient httpclient = HttpClients.createDefault();  
         try {  
             // 创建httpget ---  在这儿可以拼装get 请求参数，也可以根据具体需求传入参数
-            HttpGet httpget = new HttpGet("http://www.baidu.com/");  
+            HttpGet httpget = new HttpGet("http://www.stats.gov.cn/tjsj/zxfb/rss.xml");  
             System.out.println("executing request " + httpget.getURI());  
             // 执行get请求.    
             CloseableHttpResponse response = httpclient.execute(httpget);  
