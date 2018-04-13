@@ -1,9 +1,10 @@
 package main.socket.tcp.bio.basic;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+
+import main.socket.eterm.protocol.ReqLoginProtocol;
 
 /**
  * @author momo
@@ -21,7 +22,16 @@ public class ServerThread implements Runnable {
 
 	public void run() {
 		try {
-			// 获取Socket的输出流，用来向客户端发送数据
+			OutputStream os = client.getOutputStream();
+			InputStream is = client.getInputStream();
+			
+			byte[] buf = new byte[1024];
+			while(is.read(buf) != -1) {
+				ReqLoginProtocol.showProtocol(buf);
+			}
+			
+			
+			/*// 获取Socket的输出流，用来向客户端发送数据
 			PrintStream out = new PrintStream(client.getOutputStream());
 			// 获取Socket的输入流，用来接收从客户端发送过来的数据
 			BufferedReader buf = new BufferedReader(new InputStreamReader(
@@ -40,8 +50,8 @@ public class ServerThread implements Runnable {
 						out.println("echo:" + str);
 					}
 				}
-			}
-			out.close();
+			}*/
+			os.close();
 			client.close();
 		} catch (Exception e) {
 			e.printStackTrace();
